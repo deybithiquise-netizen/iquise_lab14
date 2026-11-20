@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:5028
+
+### Health check
+GET {{baseUrl}}/health
+
+### List products
+GET {{baseUrl}}/api/products
+
+### Create product
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{ "name": "Laptop", "price": 2500.00 }

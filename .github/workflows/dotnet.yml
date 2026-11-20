@@ -1,0 +1,39 @@
+name: Build and Deploy .NET Application
+
+on:
+  push:
+    branches:
+      - main # Runs automatically when changes are pushed to the main branch
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: # Allows running the workflow manually from the Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore iquise_lab14.slnx
+
+      - name: Build application
+        run: dotnet build iquise_lab14.slnx --configuration Release --no-restore
+
+      - name: Publish application
+        run: dotnet publish iquise_lab14.Api/iquise_lab14.Api.csproj --configuration Release --no-build --output ./published
+
+      - name: Upload published files
+        uses: actions/upload-artifact@v4
+        with:
+          name: iquise_lab14-published
+          path: ./published
+          retention-days: 7
